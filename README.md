@@ -44,7 +44,7 @@ Instead of size, one can choose to provide one or more of minWidth, maxWidth and
 array
 In order to use array, one has to provide item, which indicates the data type of the elements of the array. For example, if an entity can have multiple images, following definition can be provided:
 
-```
+```json
 {
     "images": {
         "type": "array",
@@ -58,3 +58,28 @@ In order to use array, one has to provide item, which indicates the data type of
 }
 ```
 Note that `item` can have all keys defined just like any normal field definition.
+
+#### Custom Data Type
+All the defined models can be used as a type as well to support nested behaviour. For example,
+if we have a model in category.json, we can use this model as a type in another model like book.json as shown below:
+```json
+// book.json
+{
+  "id": {
+    "type": "number",
+    "min": "1",
+    "required": true
+  },
+  "name": {
+    "type": "string",
+    "required": true
+  },
+  "imageURL": {
+    "type": "image",
+    "size": "160x160"
+  },
+  "category": {
+    "type": "category" // NOTE THIS
+  }
+}
+```

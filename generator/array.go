@@ -1,8 +1,6 @@
 package generator
 
 import (
-	"fmt"
-
 	"github.com/mitchellh/mapstructure"
 )
 
@@ -28,7 +26,7 @@ func (a *Array) Generate() interface{} {
 	resp := make([]interface{}, size)
 
 	for i := 0; i < size; i++ {
-		v := GetValue(fmt.Sprintf("%s", a.Item["type"]), a.Item)
+		v, _ := GenerateValueForConfig(a.Item)
 		resp[i] = v
 	}
 	return resp

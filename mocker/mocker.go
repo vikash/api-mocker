@@ -6,21 +6,24 @@ import (
 	"strings"
 
 	"github.com/vikash/api-mocker/generator"
+
+	"github.com/vikash/api-mocker/models"
+
 	"github.com/vikash/gofr/pkg/gofr"
 	"github.com/vikash/gofr/pkg/gofr/logging"
 )
 
 type Mocker struct {
-	entities map[string]generator.Structure
-	server   *gofr.App
-	logger   logging.Logger
+	store  models.ModelStore
+	server *gofr.App
+	logger logging.Logger
 }
 
 func NewFromFolder(c *gofr.Context, dirname string) *Mocker {
 	m := &Mocker{
-		entities: make(map[string]generator.Structure),
-		server:   gofr.New(),
-		logger:   c.Logger,
+		store:  models.NewModelStore(),
+		server: gofr.New(),
+		logger: c.Logger,
 	}
 
 	files, err := ioutil.ReadDir(dirname)
@@ -29,7 +32,7 @@ func NewFromFolder(c *gofr.Context, dirname string) *Mocker {
 	}
 
 	for _, file := range files {
-		if !file.IsDir() {
+		if !file.IsDir() && strings.HasSuffix(file.Name(), ".json") {
 			fullPath := fmt.Sprintf("%s/%s", dirname, file.Name())
 			c.Debug("File Found: ", fullPath)
 			entityName := strings.TrimSuffix(file.Name(), ".json")
@@ -39,8 +42,7 @@ func NewFromFolder(c *gofr.Context, dirname string) *Mocker {
 				c.Errorf("Error reading file %s. Error: %s", entityName, err)
 			}
 
-			m.entities[entityName] = generator.JSONToStructure(bytes)
-
+			m.store.AddModel(models.ModelName(entityName), models.JSONToStructure(bytes))
 		}
 	}
 
@@ -53,19 +55,18 @@ func (m *Mocker) Serve() {
 }
 
 func (m *Mocker) addRoutes() {
-	for entity, structure := range m.entities {
+	for entity, _ := range m.store.GetModels() {
 		// We need a local copy for handler to function properly - common map range bug alert!
-		ls := structure
 		e := entity
 
 		m.logger.Debug("Adding route for", entity)
-		m.server.GET("/"+e, func(c *gofr.Context) (interface{}, error) {
+		m.server.GET("/"+string(e), func(c *gofr.Context) (interface{}, error) {
 			count := 10
 			response := make([]interface{}, count)
 			for i := 0; i < count; i++ {
-				response[i] = generator.ObjectForStructure(ls)
+				response[i] = generator.GenerateObject(e, m.store)
 			}
-			return map[string]interface{}{
+			return map[models.ModelName]interface{}{
 				e: response,
 				"meta": map[string]int{
 					"limit":  10,

@@ -4,6 +4,8 @@ go 1.17
 
 require github.com/vikash/gofr v0.0.0-20220112120122-bbaeca812c75
 
+require github.com/mitchellh/mapstructure v1.4.3
+
 require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
@@ -18,7 +20,6 @@ require (
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
 	github.com/joho/godotenv v1.4.0 // indirect
-	github.com/mitchellh/mapstructure v1.4.3
 	github.com/openzipkin/zipkin-go v0.3.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.28.0 // indirect
 	go.opentelemetry.io/otel v1.3.0 // indirect
