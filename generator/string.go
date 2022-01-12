@@ -9,7 +9,7 @@ import (
 type StringGenerator struct {
 	MaxLength int
 	MinLength int
-	Required bool
+	Required  bool
 }
 
 func String(def map[string]interface{}) Generator {
@@ -18,12 +18,12 @@ func String(def map[string]interface{}) Generator {
 		MinLength: 4,
 	}
 
-	mapstructure.Decode(def, &sg )
+	mapstructure.Decode(def, &sg)
 	return sg
 }
 
-func (s *StringGenerator) Generate() interface{}{
-	length := rand.Intn(s.MaxLength - s.MinLength) + s.MinLength
+func (s *StringGenerator) Generate() interface{} {
+	length := randBetween(s.MinLength, s.MaxLength)
 	return randSeq(length)
 }
 

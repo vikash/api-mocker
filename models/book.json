@@ -18,5 +18,15 @@
   "image": {
     "type": "image",
     "aspectRatio": "2:3"
+  },
+  "tags": {
+    "type": "array",
+    "minLength": 0,
+    "maxLength": 10,
+    "item": {
+      "type": "string",
+      "maxLength": 10
+    }
   }
+
 }

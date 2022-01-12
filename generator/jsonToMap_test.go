@@ -1,4 +1,4 @@
-package mocker
+package generator
 
 import "testing"
 
@@ -20,10 +20,9 @@ func TestJSONToObject(t *testing.T) {
 	}`
 
 	s := jsonToStructure([]byte(json))
-	o := objectForStructure(s)
+	o := ObjectForStructure(s)
 
 	if _, ok := o["id"]; !ok {
 		t.Error("Map was expected to have id but not found.")
 	}
 }
-

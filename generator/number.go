@@ -7,8 +7,8 @@ import (
 )
 
 type Number struct {
-	Min int
-	Max int
+	Min      int
+	Max      int
 	Required bool
 }
 
@@ -17,10 +17,14 @@ func NewNumber(def map[string]interface{}) Generator {
 		Min: 1,
 		Max: 999999999,
 	}
-	mapstructure.Decode(def, &num )
+	mapstructure.Decode(def, &num)
 	return &num
 }
 
-func (n *Number) Generate() interface{}{
-	return rand.Intn(n.Max - n.Min) + n.Min
+func (n *Number) Generate() interface{} {
+	return randBetween(n.Min, n.Max)
+}
+
+func randBetween(min int, max int) int {
+	return rand.Intn(max-min) + min
 }

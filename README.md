@@ -40,3 +40,21 @@ Default values are 4 and 20 respectively.
 This is used to indicate an image. If an optional size is provided in {width}X{height} format, a URL for placeholder image of this size is return.
 Instead of size, one can choose to provide one or more of minWidth, maxWidth and aspectRatio in format of 'W:H' like 16:9 or 4:3. The default values are 160, 1000 and 1:1 respectively. Unit of all sizes are pixels.
 
+#### array
+array
+In order to use array, one has to provide item, which indicates the data type of the elements of the array. For example, if an entity can have multiple images, following definition can be provided:
+
+```
+{
+    "images": {
+        "type": "array",
+        "maxLength": 10,
+        "minLength": 2,
+        "item": {
+            "type": "image",
+            "aspect-ratio": "4:3"
+        }
+    }
+}
+```
+Note that `item` can have all keys defined just like any normal field definition.

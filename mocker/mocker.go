@@ -2,23 +2,25 @@ package mocker
 
 import (
 	"fmt"
-	"github.com/vikash/gofr/pkg/gofr"
-	"github.com/vikash/gofr/pkg/gofr/logging"
 	"io/ioutil"
 	"strings"
+
+	"github.com/vikash/api-mocker/generator"
+	"github.com/vikash/gofr/pkg/gofr"
+	"github.com/vikash/gofr/pkg/gofr/logging"
 )
 
-type Mocker struct{
-	entities  map[string]Structure
-	server *gofr.App
-	logger logging.Logger
+type Mocker struct {
+	entities map[string]generator.Structure
+	server   *gofr.App
+	logger   logging.Logger
 }
 
-func NewFromFolder(c *gofr.Context, dirname string) *Mocker{
+func NewFromFolder(c *gofr.Context, dirname string) *Mocker {
 	m := &Mocker{
-		entities: make(map[string]Structure),
-		server: gofr.New(),
-		logger: c.Logger,
+		entities: make(map[string]generator.Structure),
+		server:   gofr.New(),
+		logger:   c.Logger,
 	}
 
 	files, err := ioutil.ReadDir(dirname)
@@ -33,11 +35,11 @@ func NewFromFolder(c *gofr.Context, dirname string) *Mocker{
 			entityName := strings.TrimSuffix(file.Name(), ".json")
 			bytes, err := ioutil.ReadFile(fullPath)
 
-			if err!=nil {
+			if err != nil {
 				c.Errorf("Error reading file %s. Error: %s", entityName, err)
 			}
 
-			m.entities[entityName] = jsonToStructure(bytes)
+			m.entities[entityName] = generator.JSONToStructure(bytes)
 
 		}
 	}
@@ -56,21 +58,20 @@ func (m *Mocker) addRoutes() {
 		ls := structure
 		e := entity
 
-		m.logger.Debug("Adding route for", entity )
+		m.logger.Debug("Adding route for", entity)
 		m.server.GET("/"+e, func(c *gofr.Context) (interface{}, error) {
 			count := 10
-			response := make([]interface{},count)
-			for i := 0; i < count; i ++ {
-				response[i] = objectForStructure(ls)
+			response := make([]interface{}, count)
+			for i := 0; i < count; i++ {
+				response[i] = generator.ObjectForStructure(ls)
 			}
 			return map[string]interface{}{
 				e: response,
 				"meta": map[string]int{
-					"limit": 10,
+					"limit":  10,
 					"offset": 0,
 				},
 			}, nil
 		})
 	}
 }
-

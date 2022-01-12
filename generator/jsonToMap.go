@@ -1,20 +1,19 @@
-package mocker
+package generator
 
 import (
 	"encoding/json"
-	"github.com/vikash/api-mocker/generator"
 	"strings"
 )
 
 type Structure map[string]map[string]interface{}
 
-func jsonToStructure(bytes []byte) Structure{
+func JSONToStructure(bytes []byte) Structure {
 	structure := make(map[string]map[string]interface{})
 	json.Unmarshal(bytes, &structure)
 	return structure
 }
 
-func objectForStructure(structure Structure) map[string]interface{} {
+func ObjectForStructure(structure Structure) map[string]interface{} {
 
 	object := make(map[string]interface{})
 
@@ -24,28 +23,27 @@ func objectForStructure(structure Structure) map[string]interface{} {
 			objectType = "string"
 		}
 
-		object[name] = getValue(objectType, def)
+		object[name] = GetValue(objectType, def)
 	}
 
 	return object
 }
 
-
-func getValue(objectType string, def map[string]interface{}) interface{} {
-	var g generator.Generator
+func GetValue(objectType string, def map[string]interface{}) interface{} {
+	var g Generator
 
 	switch strings.ToLower(objectType) {
 	case "number":
-		g = generator.NewNumber(def)
+		g = NewNumber(def)
 	case "string":
-		g = generator.String(def)
+		g = String(def)
 	case "image":
-		g = generator.NewImage(def)
+		g = NewImage(def)
+	case "array":
+		g = NewArray(def)
 	default:
-		g = generator.String(def)
+		g = String(def)
 	}
 
 	return g.Generate()
 }
-
-
