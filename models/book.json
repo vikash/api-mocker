@@ -1,0 +1,22 @@
+{
+  "id": {
+    "type": "number",
+    "min": 1,
+    "max": 10000,
+    "required": true
+  },
+  "name": {
+    "type": "string",
+    "required": true,
+    "minLength": 1,
+    "maxLength": 45
+  },
+  "description": {
+    "type": "string",
+    "maxLength": 200
+  },
+  "image": {
+    "type": "image",
+    "aspectRatio": "2:3"
+  }
+}
