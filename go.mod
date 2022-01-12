@@ -2,9 +2,7 @@ module github.com/vikash/api-mocker
 
 go 1.17
 
-require github.com/vikash/gofr v0.0.0-20220112034040-c7669857c1a8
-
-replace github.com/vikash/gofr => ../gofr
+require github.com/vikash/gofr v0.0.0-20220112120122-bbaeca812c75
 
 require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect

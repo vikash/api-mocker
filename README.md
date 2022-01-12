@@ -6,6 +6,9 @@ have a very simple configuration to quickly run a mock server on local machine f
 
 
 ## Mocking an API
+Install the binary using: `go install github.com/vikash/api-mocker@latest`. Once installed, it can be executed by simply
+typing `api-mocker` in terminal as long as `$GOPATH/bin` is added to `$PATH`. 
+
 A json structure for a model needs to be written. Some samples are written in the `models` folder. By default, this
 projects is reading the definitions from `./models` folder. Server starts on port 8000. 
 
